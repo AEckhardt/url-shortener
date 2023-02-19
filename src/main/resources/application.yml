@@ -1,0 +1,24 @@
+spring:
+  data:
+    mongodb:
+      host: ${MONGO_DB_HOST}
+      port: ${MONGO_DB_PORT}
+      database: ${MONGO_DB_DATABASE}
+      authentication-database: ${MONGO_DB_AUTHENTICATION_DATABASE}
+      username: ${MONGO_DB_USERNAME}
+      password: ${MONGO_DB_PASSWORD}
+
+springdoc:
+  api-docs:
+    path: /api-docs/open-api.yml
+  swagger-ui:
+    path: /api-docs/swagger-ui.html
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: info, health
+
+domain:
+  ${DOMAIN_NAME}
