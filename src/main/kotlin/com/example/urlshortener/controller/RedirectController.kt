@@ -15,8 +15,8 @@ import org.springframework.web.servlet.view.RedirectView
 class RedirectController(
     private val shortUrlRepository: ShortUrlRepository,
 ) {
-    @Operation(summary = "Redirects to url linked to short url")
-    @ApiResponse(responseCode = "302", description = "Redirect to linked url")
+    @Operation(summary = "Redirects to long url")
+    @ApiResponse(responseCode = "302", description = "Redirect to long url")
     @ApiResponse(responseCode = "404", description = "Short url not found")
     @GetMapping("/{id}")
     fun redirectToLongUrl(@PathVariable id: String): RedirectView {
