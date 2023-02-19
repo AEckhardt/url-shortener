@@ -40,7 +40,7 @@ class RedirectControllerIntegrationTest {
     lateinit var shortUrlRepository: ShortUrlRepository
 
     @AfterEach
-    fun setUp() {
+    fun deleteAll() {
         shortUrlRepository.deleteAll()
     }
 

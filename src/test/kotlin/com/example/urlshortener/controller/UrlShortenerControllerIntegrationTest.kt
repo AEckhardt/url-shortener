@@ -43,12 +43,12 @@ class UrlShortenerControllerIntegrationTest {
     lateinit var shortUrlRepository: ShortUrlRepository
 
     @AfterEach
-    fun setUp() {
+    fun deleteAll() {
         shortUrlRepository.deleteAll()
     }
 
     @Test
-    fun createShortUrl() {
+    fun `should create a short url`() {
         val result = mvc.perform(
             post("/create")
                 .contentType(MediaType.APPLICATION_JSON)
