@@ -1,6 +1,7 @@
 package com.example.urlshortener.controller
 
 import com.example.urlshortener.repository.ShortUrl
+import com.example.urlshortener.service.IdCollisionException
 import com.example.urlshortener.service.UrlShortener
 import io.swagger.v3.oas.annotations.Operation
 import io.swagger.v3.oas.annotations.media.Content
@@ -12,6 +13,7 @@ import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.ResponseStatus
 import org.springframework.web.bind.annotation.RestController
+import org.springframework.web.server.ResponseStatusException
 import java.net.URL
 import io.swagger.v3.oas.annotations.parameters.RequestBody as ApiRequestBody
 
@@ -28,11 +30,7 @@ class ShortUrlController(
     @ApiResponse(
         responseCode = "201",
         description = "Short url created",
-        content = [
-            Content(
-                schema = Schema(implementation = ShortUrlCreatedResponse::class),
-            ),
-        ],
+        content = [Content(schema = Schema(implementation = ShortUrlCreatedResponse::class))],
     )
     @PostMapping(
         path = ["create"],
@@ -41,7 +39,11 @@ class ShortUrlController(
     )
     @ResponseStatus(HttpStatus.CREATED)
     fun createShortUrl(@RequestBody createShortUrlRequest: CreateShortUrlRequest): ShortUrlCreatedResponse {
-        return urlShortener.createShortUrl(createShortUrlRequest).toCreatedResponse()
+        return try {
+            urlShortener.createShortUrl(createShortUrlRequest).toCreatedResponse()
+        } catch (ex: IdCollisionException) {
+            throw ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "An unexpected error occurred, try again")
+        }
     }
 
     private fun ShortUrl.toCreatedResponse() =
